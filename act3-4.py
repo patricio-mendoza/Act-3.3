@@ -7,7 +7,7 @@ def main():
     file.write("\t\t<title>Resaltador de Sintaxix</title>\n")
     file.write("\t\t<link rel=\"stylesheet\" href=\"styles.css\">\n")
     file.write("\t</head>\n")
-    file.write("\t<body>\n")
+    file.write("\t<body bgcolor = #17202A>\n")
 
     file.write("\t\t<span class=\"reservado\">" + "Palabra Reservada: int, float, for" + "</span>\n")
     file.write("\t\t<br>\n")
