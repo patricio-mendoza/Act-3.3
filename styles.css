@@ -1,9 +1,13 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .reservado {
     color: rgb(255, 238, 0);
 }
 
 .operador {
-    color: rgb(70, 70, 220);
+    color: rgb(129, 162, 252);
 }
 
 .literal {
@@ -15,7 +19,7 @@
 }
 
 .char {
-    color: rgb(0, 208, 204);
+    color: rgb(0, 255, 251);
 }
 
 .string {
