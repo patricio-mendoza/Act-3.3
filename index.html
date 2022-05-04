@@ -1,29 +1,103 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Resaltador de Sintaxix</title>
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	<body bgcolor=#121212>
+		<h2>Leyenda:</h2>
+		<span class="reservado">Palabra Reservada: int, float, for</span>
+		<br>
+		<span class="operador">Operador: +, -, =, ;</span>
+		<br>
+		<span class="literal">Literal: 4, 6.4, -31.1</span>
+		<br>
+		<span class="variable">Variable: hola1, _f4ws, i</span>
+		<br>
+		<span class="char">Char: 'a', '5', 'V'</span>
+		<br>
+		<span class="string">String: "Hola","String"</span>
+		<br>
+		<span class="comentario">Comentario: // Esto es un comentario</span>
+		<br>
+		<span class="error">1a2svb4v</span>
+		<br>
 
-<head>
-	<meta charset="utf-8" />
-	<title>Resaltador de Sintaxix</title>
-	<link rel="stylesheet" href="styles.css">
-</head>
-
-<body bgcolor=#121212>
-	<span class="reservado">Palabra Reservada: int, float, for</span>
-	<br>
-	<span class="operador">Operador: +, -, =, ;</span>
-	<br>
-	<span class="literal">Literal: 4, 6.4, -31.1</span>
-	<br>
-	<span class="variable">Variable: hola1, _f4ws, i</span>
-	<br>
-	<span class="char">Char: 'a', '5', 'V'</span>
-	<br>
-	<span class="string">String: "Hola","String"</span>
-	<br>
-	<span class="comentario">Comentario: // Esto es un comentario</span>
-	<br>
-	<span class="error">1a2svb4v</span>
-	<br>
-</body>
-
+		<h2>Resaltador de Sintaxis:</h2>
+		<span class="comentario">// Solving SPOJ's TAP2014A - At random</span>
+		<br>
+		<span class="comentario">#include   "iostream"</span>
+		<br>
+		<span class="comentario">using   namespace   std ;</span>
+		<br>
+		<span class="comentario"></span>
+		<br>
+		<span class="comentario">const   auto   INF  =  1e18LL ;</span>
+		<br>
+		<span class="comentario"></span>
+		<br>
+		<span class="comentario">void   printAns ( bool   ans ) {</span>
+		<br>
+		<span class="comentario">   cout  << ( ans   ?   'B'  :  'M' ) <<  endl ;</span>
+		<br>
+		<span class="comentario">}</span>
+		<br>
+		<span class="comentario"></span>
+		<br>
+		<span class="comentario">int   main () {</span>
+		<br>
+		<span class="comentario">   int   t ;</span>
+		<br>
+		<span class="comentario">   cin  >>  t ;</span>
+		<br>
+		<span class="comentario"></span>
+		<br>
+		<span class="comentario">   while  ( t --) {</span>
+		<br>
+		<span class="comentario">     int   n ;</span>
+		<br>
+		<span class="comentario">     cin  >>  n ;</span>
+		<br>
+		<span class="comentario"></span>
+		<br>
+		<span class="comentario">     bool   ans  =  true ;  // will stay the same if condition meets</span>
+		<br>
+		<span class="comentario">     int   last  = - 1 ,  cur ;</span>
+		<br>
+		<span class="comentario">     char   prev  =  0 ,  now ;</span>
+		<br>
+		<span class="comentario"></span>
+		<br>
+		<span class="comentario">     for  ( int   i  =  0 ;  i  <  n ; ++ i ) {</span>
+		<br>
+		<span class="comentario">       cin  >>  cur  >>  now ;</span>
+		<br>
+		<span class="comentario"></span>
+		<br>
+		<span class="comentario">       // if any of the two numbers are the same, it changes value of ans</span>
+		<br>
+		<span class="comentario">       if  ( cur  ==  last  ||  now  ==  prev ) {</span>
+		<br>
+		<span class="comentario">         ans  =  false ;</span>
+		<br>
+		<span class="comentario">      }</span>
+		<br>
+		<span class="comentario">       last  =  cur ;</span>
+		<br>
+		<span class="comentario">       prev  =  now ;</span>
+		<br>
+		<span class="comentario">    }</span>
+		<br>
+		<span class="comentario">     printAns ( ans );</span>
+		<br>
+		<span class="comentario">  }</span>
+		<br>
+		<span class="comentario">   return   0 ;</span>
+		<br>
+		<span class="comentario"></span>
+		<br>
+		<span class="comentario">}</span>
+		<br>
+	</body>
 </html>

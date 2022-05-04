@@ -1,0 +1,121 @@
+Palabras reservadas
+    double 
+    else 
+    false 
+    float 
+    for 
+    if 
+    int
+    long 
+    namespace
+    new 
+    private 
+    protected 
+    public 
+    return
+    const
+    include
+    struct
+    switch 
+    this 
+    throw
+    true 
+    void
+    while
+    cin
+    cout
+
+Operadores
+    +
+    - 
+    /
+    *
+    ()
+    []
+    {}
+    <
+    >
+    <=
+    >=
+    ==
+    !=
+    ->
+    ++
+    --
+    !
+    &&
+    ||
+    >>
+    <<
+    =
+    +=
+    *=
+    -=
+    /=
+    ,
+    ;
+    ?
+    :
+    >>
+    <<
+
+Literales
+    Enteros: 
+        Están formados por 1 o más dígitos del 0 al 9. 
+        El primer dígito debe ser distinto de cero.
+        Si son negativos, el primer digito debe ser un -
+            Ejemplos:
+                12
+                243
+                -54
+    Reales:
+        Deben llevar un parte entera, un punto decimal y una parte fraccionaria. 
+        Si la parte entera es cero, puede omitirse.
+            Ejemplos:
+                43.2343
+                -2.78
+                .96
+    Caracter único (char):
+        Contienen un solo carácter encerrado entre comillas simples.
+        Los caracteres posibles son todos los contenidos en la tabla ASCII.
+            Ejemplos:
+                'a'   
+                '4'  
+                'B'
+    Cadena de caracteres (string, varchar):
+        Están formados por 0 ó más caracteres encerrados entre comillas dobles.
+        Los caracteres posibles son todos los contenidos en la tabla ASCII.
+            Ejemplos:
+                "Hola Mundo"
+                "Esto es una cadena de caracteres"
+                "seklgdfglgsef-sefsefssegdr.fgdgser"
+    Variables:
+        Pueden inicial con letras (mayúsculas o minúsculas) o un gión bajo.
+        Puede contener numeros solo despues de la primera letra.
+        No se puede dejar un espacio en blanco entre caracteres.
+        No puede ser una palabra reservada.
+            Ejemplos:
+                variable 
+                hola_a_todos26
+                _x6x6x6
+Comentarios:
+    Comentarios en linea:
+        Se declaran usando un doble guión. 
+        Todo lo que esté despues de ese guión estará dentro del comentario.
+        El comentario se acaba cuando haya un salto de linea.
+            Ejemplos:
+                // Aquí puedo escribir lo que quiera. 
+                // Los espacios o caracteres usados no importan
+                // f-ffse¿?ses`sf`2ç*}^0[fdh<<xA57
+    Comentarios multilinea
+        Se declaran usando un guión y un asterisco.
+        Cuando se abre, se escribe /*
+        Cuando se cierra, se escribe */
+        Todo lo que esté entre esos dos elementos será comentado (sin importar los saltos de linea)
+            Ejemplo:
+                /*  
+                Esto es un comentario multilinea
+                Puedo escribir lo que quiera, al igual que un comentario en linea
+                f-ffse¿?ses`sf`2ç*}^0[fdh<<xA57   
+                */
+
