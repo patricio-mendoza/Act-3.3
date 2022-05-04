@@ -24,6 +24,7 @@ def main():
     file.write("\t\t<span class=\"comentario\">" + "Comentario: // Esto es un comentario" + "</span>\n")
     file.write("\t\t<br>\n")
     file.write("\t\t<span class=\"error\">" + "1a2svb4v" + "</span>\n")
+    file.write("\t\t<br>\n")
 
     file.write("\t</body>\n")
     file.write("</html>")
