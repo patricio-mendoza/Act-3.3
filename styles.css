@@ -16,11 +16,11 @@ body {
 }
 
 .variable {
-    color: rgb(255, 170, 0);
+    color: rgb(218, 124, 124);
 }
 
 .char {
-    color: rgb(0, 255, 251);
+    color: rgb(0, 223, 219);
 }
 
 .string {
@@ -28,7 +28,7 @@ body {
 }
 
 .comentario {
-    color: rgb(255, 255, 255);
+    color: rgb(173, 166, 166);
 }
 
 .error {
