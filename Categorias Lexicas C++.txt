@@ -1,63 +1,63 @@
 Palabras reservadas
-    double 
-    else 
-    false 
-    float 
-    for 
-    if 
-    int
-    long 
-    namespace
-    new 
-    private 
-    protected 
-    public 
-    return
-    const
-    include
-    struct
-    switch 
-    this 
-    throw
-    true 
-    void
-    while
-    cin
-    cout
+    "double", 
+    "else", 
+    "false", 
+    "float", 
+    "for", 
+    "if", 
+    "int",
+    "long", 
+    "namespace",
+    "new", 
+    "private", 
+    "protected", 
+    "public", 
+    "return",
+    "const",
+    "include",
+    "struct",
+    "switch", 
+    "this", 
+    "throw",
+    "true", 
+    "void",
+    "while",
+    "cin",
+    "cout",
 
-Operadores
-    +
-    - 
-    /
-    *
-    ()
-    []
-    {}
-    <
-    >
-    <=
-    >=
-    ==
-    !=
-    ->
-    ++
-    --
-    !
-    &&
-    ||
-    >>
-    <<
-    =
-    +=
-    *=
-    -=
-    /=
-    ,
-    ;
-    ?
-    :
-    >>
-    <<
+Operadores      "    fsjklfhsfjk fseef sef s aseffse 243 "
+    "+",
+    "-", 
+    "/",
+    "*",
+    "()",
+    "[]",
+    "{}",
+    "<",
+    ">",
+    "<=",
+    ">=",
+    "==",
+    "!=",
+    "->",
+    "++",
+    "--",
+    "!",
+    "&&",
+    "||",
+    ">>",
+    "<<",
+    "=",
+    "+=",
+    "*=",
+    "-=",
+    "/=",
+    ",",
+    ";",
+    "?",
+    ":",
+    ">>",
+    "<<",
 
 Literales
     Enteros: 
@@ -118,4 +118,3 @@ Comentarios:
                 Puedo escribir lo que quiera, al igual que un comentario en linea
                 f-ffse¿?ses`sf`2ç*}^0[fdh<<xA57   
                 */
-
