@@ -107,7 +107,7 @@ def main():
     htmlFile.write("\t\t<br>\n")
     htmlFile.write("\t\t<span class=\"comentario\">" + "Comentario: // Esto es un comentario" + "</span>\n")
     htmlFile.write("\t\t<br>\n")
-    htmlFile.write("\t\t<span class=\"error\">" + "1a2svb4v" + "</span>\n")
+    htmlFile.write("\t\t<span class=\"error\">" + "Error: 1a2svb4v" + "</span>\n")
     htmlFile.write("\t\t<br>\n\n")
 
     # RESALTADOR DE SINTAXIS
