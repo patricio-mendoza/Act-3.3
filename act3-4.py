@@ -28,7 +28,8 @@ palabrasReservadas = [
     "cout",
     "bool",
     "endl",
-    "auto"]
+    "auto",
+    "unsigned"]
 
 operadores = [
     "+",
@@ -67,9 +68,11 @@ def isVariable(palabra):
             return False
     return True
 
-def isNumber(token):
+def isNumber(palabra):
     try:
-        float(token)
+        if(len(palabra) > 2 and palabra[-2:] == "LL"):
+            palabra = palabra[:-2]
+        float(palabra)
         return True
     except ValueError:
         return False
@@ -146,7 +149,6 @@ def main():
             htmlFile.write("\t\t<span class=\"" + tipo + "\">" + palabra + "</span>\n")
         htmlFile.write("\t\t<br>\n")
         
-
     htmlFile.write("\t</body>\n")
     htmlFile.write("</html>")
 
