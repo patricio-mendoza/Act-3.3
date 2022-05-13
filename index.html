@@ -2,197 +2,66 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title>Resaltador de Sintaxix</title>
 		<link rel="stylesheet" href="styles.css">
 	</head>
-	<body bgcolor=#121212>
-		<h2>Leyenda:</h2>
-		<span class="reservado">Palabra Reservada: int, float, for</span>
-		<br>
-		<span class="operador">Operador: +, -, =, ;</span>
-		<br>
-		<span class="literal">Literal: 4, 6.4, -31.1</span>
-		<br>
-		<span class="variable">Variable: hola1, _f4ws, i</span>
-		<br>
-		<span class="char">Char: 'a', '5', 'V'</span>
-		<br>
-		<span class="string">String: "Hola","String"</span>
-		<br>
-		<span class="comentario">Comentario: // Esto es un comentario</span>
-		<br>
-		<span class="error">Error: 1a2svb4v</span>
-		<br>
-
-		<h2>Resaltador de Sintaxis:</h2>
-		<span class="comentario">// Solving SPOJ's TAP2014A - At random</span>
-		<br>
-		<span class="reservado">#include</span>
-		<span class="string">"iostream"</span>
-		<br>
-		<span class="variable">using</span>
-		<span class="reservado">namespace</span>
-		<span class="variable">std</span>
-		<span class="operador">;</span>
-		<br>
-		<br>
-		<span class="reservado">const</span>
-		<span class="reservado">auto</span>
-		<span class="variable">INF</span>
-		<span class="operador">=</span>
-		<span class="literal">1e18LL</span>
-		<span class="operador">;</span>
-		<br>
-		<br>
-		<span class="reservado">void</span>
-		<span class="variable">printAns</span>
-		<span class="operador">(</span>
-		<span class="reservado">bool</span>
-		<span class="variable">ans</span>
-		<span class="operador">)</span>
-		<span class="operador">{</span>
-		<br>
-		<span class="reservado">cout</span>
-		<span class="operador"><<</span>
-		<span class="operador">(</span>
-		<span class="variable">ans</span>
-		<span class="operador">?</span>
-		<span class="char">'B'</span>
-		<span class="operador">:</span>
-		<span class="char">'M'</span>
-		<span class="operador">)</span>
-		<span class="operador"><<</span>
-		<span class="reservado">endl</span>
-		<span class="operador">;</span>
-		<br>
-		<span class="operador">}</span>
-		<br>
-		<br>
-		<span class="reservado">int</span>
-		<span class="variable">main</span>
-		<span class="operador">()</span>
-		<span class="operador">{</span>
-		<br>
-		<span class="reservado">int</span>
-		<span class="variable">t</span>
-		<span class="operador">;</span>
-		<br>
-		<span class="reservado">cin</span>
-		<span class="operador">>></span>
-		<span class="variable">t</span>
-		<span class="operador">;</span>
-		<br>
-		<br>
-		<span class="reservado">while</span>
-		<span class="operador">(</span>
-		<span class="variable">t</span>
-		<span class="operador">--)</span>
-		<span class="operador">{</span>
-		<br>
-		<span class="reservado">int</span>
-		<span class="variable">n</span>
-		<span class="operador">;</span>
-		<br>
-		<span class="reservado">cin</span>
-		<span class="operador">>></span>
-		<span class="variable">n</span>
-		<span class="operador">;</span>
-		<br>
-		<br>
-		<span class="reservado">bool</span>
-		<span class="variable">ans</span>
-		<span class="operador">=</span>
-		<span class="reservado">true</span>
-		<span class="operador">;</span>
-		<span class="comentario">// will stay the same if condition meets</span>
-		<br>
-		<span class="reservado">int</span>
-		<span class="variable">last</span>
-		<span class="operador">=</span>
-		<span class="operador">-</span>
-		<span class="literal">1</span>
-		<span class="operador">,</span>
-		<span class="variable">cur</span>
-		<span class="operador">;</span>
-		<br>
-		<span class="reservado">char</span>
-		<span class="variable">prev</span>
-		<span class="operador">=</span>
-		<span class="literal">0</span>
-		<span class="operador">,</span>
-		<span class="variable">now</span>
-		<span class="operador">;</span>
-		<br>
-		<br>
-		<span class="reservado">for</span>
-		<span class="operador">(</span>
-		<span class="reservado">int</span>
-		<span class="variable">i</span>
-		<span class="operador">=</span>
-		<span class="literal">0</span>
-		<span class="operador">;</span>
-		<span class="variable">i</span>
-		<span class="operador"><</span>
-		<span class="variable">n</span>
-		<span class="operador">;</span>
-		<span class="operador">++</span>
-		<span class="variable">i</span>
-		<span class="operador">)</span>
-		<span class="operador">{</span>
-		<br>
-		<span class="reservado">cin</span>
-		<span class="operador">>></span>
-		<span class="variable">cur</span>
-		<span class="operador">>></span>
-		<span class="variable">now</span>
-		<span class="operador">;</span>
-		<br>
-		<br>
-		<span class="comentario">// if any of the two numbers are the same, it changes value of ans</span>
-		<br>
-		<span class="reservado">if</span>
-		<span class="operador">(</span>
-		<span class="variable">cur</span>
-		<span class="operador">==</span>
-		<span class="variable">last</span>
-		<span class="operador">||</span>
-		<span class="variable">now</span>
-		<span class="operador">==</span>
-		<span class="variable">prev</span>
-		<span class="operador">)</span>
-		<span class="operador">{</span>
-		<br>
-		<span class="variable">ans</span>
-		<span class="operador">=</span>
-		<span class="reservado">false</span>
-		<span class="operador">;</span>
-		<br>
-		<span class="operador">}</span>
-		<br>
-		<span class="variable">last</span>
-		<span class="operador">=</span>
-		<span class="variable">cur</span>
-		<span class="operador">;</span>
-		<br>
-		<span class="variable">prev</span>
-		<span class="operador">=</span>
-		<span class="variable">now</span>
-		<span class="operador">;</span>
-		<br>
-		<span class="operador">}</span>
-		<br>
-		<span class="variable">printAns</span>
-		<span class="operador">(</span>
-		<span class="variable">ans</span>
-		<span class="operador">);</span>
-		<br>
-		<span class="operador">}</span>
-		<br>
-		<span class="reservado">return</span>
-		<span class="literal">0</span>
-		<span class="operador">;</span>
-		<br>
-		<span class="operador">}</span>
-		<br>
+	<body>
+		<p><span class="comentario">//#include&nbsp;<stdio.h></span></p>
+		<p><span class=""></span>&nbsp;</p>
+		<p><span class="palabra-reservada">int</span>&nbsp;<span class="palabra-reservada">main</span><span class="separador">(</span><span class="separador">)</span>&nbsp;<span class="separador">{</span></p>
+		<p><span class=""></span>&nbsp;</p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">double</span>&nbsp;<span class="variable">n1</span><span class="separador">,</span>&nbsp;<span class="variable">n2</span><span class="separador">,</span>&nbsp;<span class="variable">n3</span><span class="separador">;</span></p>
+		<p><span class=""></span>&nbsp;</p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\n'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">b</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\b'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\f'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\r'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\f'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\a'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\t'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\v'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\\'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\''</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\"'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'\?'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">char</span>&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="string">'j'</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="variable">n</span><span class="operador">=</span><span class="literal-numerico">215</span></p>
+		<p>&nbsp;&nbsp;<span class="variable">n</span>&nbsp;<span class="variable">o</span>&nbsp;<span class="literal-numerico">215</span><span class="operador">*</span><span class="literal-numerico">1</span></p>
+		<p>&nbsp;&nbsp;<span class="variable">n</span>&nbsp;<span class="operador">=</span><span class=""></span>&nbsp;<span class="literal-numerico">215</span>&nbsp;<span class="operador">*</span><span class=""></span>&nbsp;<span class="literal-numerico">1</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">215</span><span class="operador">/</span><span class="literal-numerico">1</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">215</span>&nbsp;<span class="operador">/</span><span class=""></span>&nbsp;<span class="literal-numerico">1</span></p>
+		<p>&nbsp;&nbsp;<span class="operador">-</span><span class="literal-numerico">215</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">215</span><span class="operador">-</span><span class="literal-numerico">1</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">215</span>&nbsp;<span class="operador">-</span>&nbsp;<span class="literal-numerico">1</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">215</span><span class="operador">-</span><span class="operador">-</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">215</span><span class="operador">+</span><span class="operador">+</span><span class=""></span></p>
+		<p>&nbsp;&nbsp;<span class="operador">-</span><span class="operador">-</span><span class="literal-numerico">215</span></p>
+		<p>&nbsp;&nbsp;<span class="operador">-</span><span class="operador">/</span><span class=""></span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">215</span><span class="separador">(</span><span class="variable">hello</span><span class="separador">)</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">077</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">0</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">0121313</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">0x99</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">0X99</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">0</span><span class="operador">-</span><span class="variable">X99</span></p>
+		<p>&nbsp;&nbsp;<span class="operador">-</span><span class="literal-numerico">0x99</span></p>
+		<p>&nbsp;&nbsp;<span class="literal-numerico">0X97E</span></p>
+		<p><span class=""></span>&nbsp;</p>
+		<p>&nbsp;&nbsp;<span class="variable">printf</span><span class="separador">(</span><span class="string">"Enter three different numbers: "</span><span class="separador">)</span><span class="separador">;</span></p>
+		<p>&nbsp;&nbsp;<span class="variable">scanf</span><span class="separador">(</span><span class="string">"%lf %lf %lf"</span><span class="separador">,</span>&nbsp;<span class="operador">&</span><span class="variable">n1</span><span class="separador">,</span>&nbsp;<span class="operador">&</span><span class="variable">n2</span><span class="separador">,</span>&nbsp;<span class="operador">&</span><span class="variable">n3</span><span class="separador">)</span><span class="separador">;</span></p>
+		<p><span class=""></span>&nbsp;</p>
+		<p>&nbsp;&nbsp;<span class="comentario">//&nbsp;if&nbsp;n1&nbsp;is&nbsp;greater&nbsp;than&nbsp;both&nbsp;n2&nbsp;and&nbsp;n3,&nbsp;n1&nbsp;is&nbsp;the&nbsp;largest</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">if</span>&nbsp;<span class="separador">(</span><span class="variable">n1</span>&nbsp;<span class="operador">></span><span class="operador">=</span><span class=""></span>&nbsp;<span class="variable">n2</span>&nbsp;<span class="operador">&</span><span class="operador">&</span><span class=""></span>&nbsp;<span class="variable">n1</span>&nbsp;<span class="operador">></span><span class="operador">=</span><span class=""></span>&nbsp;<span class="variable">n3</span><span class="separador">)</span></p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">printf</span><span class="separador">(</span><span class="string">"%.2f is the largest number."</span><span class="separador">,</span>&nbsp;<span class="variable">n1</span><span class="separador">)</span><span class="separador">;</span></p>
+		<p><span class=""></span>&nbsp;</p>
+		<p>&nbsp;&nbsp;<span class="comentario">//&nbsp;if&nbsp;n2&nbsp;is&nbsp;greater&nbsp;than&nbsp;both&nbsp;n1&nbsp;and&nbsp;n3,&nbsp;n2&nbsp;is&nbsp;the&nbsp;largest</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">if</span>&nbsp;<span class="separador">(</span><span class="variable">n2</span>&nbsp;<span class="operador">></span><span class="operador">=</span><span class=""></span>&nbsp;<span class="variable">n1</span>&nbsp;<span class="operador">&</span><span class="operador">&</span><span class=""></span>&nbsp;<span class="variable">n2</span>&nbsp;<span class="operador">></span><span class="operador">=</span><span class=""></span>&nbsp;<span class="variable">n3</span><span class="separador">)</span></p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">printf</span><span class="separador">(</span><span class="string">"%.2f is the largest number."</span><span class="separador">,</span>&nbsp;<span class="variable">n2</span><span class="separador">)</span><span class="separador">;</span></p>
+		<p><span class=""></span>&nbsp;</p>
+		<p>&nbsp;&nbsp;<span class="comentario">//&nbsp;if&nbsp;n3&nbsp;is&nbsp;greater&nbsp;than&nbsp;both&nbsp;n1&nbsp;and&nbsp;n2,&nbsp;n3&nbsp;is&nbsp;the&nbsp;largest</span></p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">if</span>&nbsp;<span class="separador">(</span><span class="variable">n3</span>&nbsp;<span class="operador">></span><span class="operador">=</span><span class=""></span>&nbsp;<span class="variable">n1</span>&nbsp;<span class="operador">&</span><span class="operador">&</span><span class=""></span>&nbsp;<span class="variable">n3</span>&nbsp;<span class="operador">></span><span class="operador">=</span><span class=""></span>&nbsp;<span class="variable">n2</span><span class="separador">)</span></p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">printf</span><span class="separador">(</span><span class="string">"%.2f is the largest number."</span><span class="separador">,</span>&nbsp;<span class="variable">n3</span><span class="separador">)</span><span class="separador">;</span></p>
+		<p><span class=""></span>&nbsp;</p>
+		<p>&nbsp;&nbsp;<span class="palabra-reservada">return</span>&nbsp;<span class="literal-numerico">0</span><span class="separador">;</span></p>
+		<p><span class="separador">}</span></p>
 	</body>
 </html>

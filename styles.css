@@ -1,34 +1,37 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     color: white;
+    background-color: #000000;
+    font-size: 20px;
+    line-height: 20px;
 }
 
-.reservado {
-    color: rgb(255, 238, 0);
-}
-
-.operador {
-    color: rgb(129, 162, 252);
-}
-
-.literal {
-    color: rgb(168, 91, 246);
+.palabra-reservada {
+    color: #68b5d2;
 }
 
 .variable {
-    color: rgb(218, 124, 124);
-}
-
-.char {
-    color: rgb(0, 223, 219);
-}
-
-.string {
-    color: rgb(7, 229, 114);
+    color: #e78c45;
 }
 
 .comentario {
-    color: rgb(173, 166, 166);
+    color: #818481;
+}
+
+.operador {
+    color: #8d6199;
+}
+
+.string {
+    color: #8d9c2e;
+}
+
+.separador {
+    color: #70c0b1;
+}
+
+.literal-numerico {
+    color: #336fb7;
 }
 
 .error {

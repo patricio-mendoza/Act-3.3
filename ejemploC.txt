@@ -1,0 +1,58 @@
+//#include <stdio.h>
+
+int main() {
+
+  double n1, n2, n3;
+
+  char n = '\n';
+  char b = '\b';
+  char n = '\f';
+  char n = '\r';
+  char n = '\f';
+  char n = '\a';
+  char n = '\t';
+  char n = '\v';
+  char n = '\\';
+  char n = '\'';
+  char n = '\"';
+  char n = '\?';
+  char n = 'j';
+  n=215
+  n o 215*1
+  n = 215 * 1;
+  215/1
+  215 / 1
+  -215
+  215-1
+  215 - 1
+  215--
+  215++
+  --215
+  -/
+  215(hello)
+  077
+  0
+  0121313
+  0x99
+  0X99
+  0-X99
+  -0x99
+  0X97E
+
+  printf("Enter three different numbers: ");
+  scanf("%lf %lf %lf", &n1, &n2, &n3);
+
+  // if n1 is greater than both n2 and n3, n1 is the largest
+  if (n1 >= n2 && n1 >= n3)
+    printf("%.2f is the largest number.", n1);
+
+  // if n2 is greater than both n1 and n3, n2 is the largest
+  if (n2 >= n1 && n2 >= n3)
+    printf("%.2f is the largest number.", n2);
+
+  // if n3 is greater than both n1 and n2, n3 is the largest
+  if (n3 >= n1 && n3 >= n2)
+    printf("%.2f is the largest number.", n3);
+
+  return 0;
+}
