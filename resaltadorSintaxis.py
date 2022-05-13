@@ -10,7 +10,6 @@ Integrantes:
 
 
 import os.path
-from random import uniform
 import sys
 
 
@@ -27,15 +26,16 @@ SEPARADORES = [
 ]
 
 OPERADORES = [
-    '+', '*', '%', '=', '>', '<', '!', '&', '?', ':', '~', '^', '|'
+    '+', '*', '%', '=', '>', '<', '!', '&', '?', ':', '~', '^',
+    '|', "&lt", "&gt", "&amp", '.'
 ]
 
-# Falta -. / y compuestos
-
-TOKEN_REQUIERE_FORMATO = {
-    ' ' : "&nbsp;",
-    '<' : "&lt",
-    '>' : "&gt"
+CHAR_REQUIERE_FORMATO = {
+    '&' : '&amp',
+    '<' : '&lt',
+    '>' : '&gt',
+    '"' : '&quot',
+    "'" : '&#39'
 }
 
 
@@ -80,6 +80,9 @@ def resaltar(htmlFile):
             codigoResaltado.append(tokenEnHTML + "</p>")
             break
 
+        if char in CHAR_REQUIERE_FORMATO:
+            char = CHAR_REQUIERE_FORMATO[char]
+
         if estado == "inicial":
             if char.isalpha():
                 estado = "variable"
@@ -91,15 +94,15 @@ def resaltar(htmlFile):
                 estado = "entero"
                 unfinishedToken.append(char)
             elif char == '.':
-                estado = "real"
+                estado = "real_sin_parte_entera"
                 unfinishedToken.append(char)
             elif char == '-':
                 estado = "resta"
                 unfinishedToken.append(char)
-            elif char == "'":
+            elif char == "&#39":
                 estado = "literal_caracter"
                 unfinishedToken.append(char)
-            elif char == '"':
+            elif char == '&quot':
                 estado = "string"
                 unfinishedToken.append(char)
             elif char == '/':
@@ -120,6 +123,29 @@ def resaltar(htmlFile):
                 codigoResaltado.append(tokenEnHTML)
                 codigoResaltado.append(ESPACIO_HTML + NUEVO_PARRAFO_HTML)
                 unfinishedToken = []
+            elif char == "#":
+                estado = "include_define"
+                unfinishedToken.append(char)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+        
+        elif estado == "include_define":
+            if char == ' ':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(ESPACIO_HTML)
+            elif char == '\n':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                codigoResaltado.append(ESPACIO_HTML + NUEVO_PARRAFO_HTML)
+                unfinishedToken = []
+            elif char.isalpha():
+                unfinishedToken.append(char)
             else:
                 codigoResaltado.append(manejarErrorSintaxis())
                 break
@@ -164,8 +190,316 @@ def resaltar(htmlFile):
             if isInteger(char):
                 estado = "entero"
                 unfinishedToken.append(char)
+            elif char == 'e' or char == 'E':
+                estado = "entero_con_exponente"
+                unfinishedToken.append(char)
+            elif char == 'u' or char == 'U':
+                estado = "unsigned_int"
+                unfinishedToken.append(char)
+            elif char == 'l' or char == 'L':
+                estado = "long_int"
+                unfinishedToken.append(char)
             elif char == '.':
                 estado = "real"
+                unfinishedToken.append(char)
+            elif char == '-':
+                estado = "resta"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == "/":
+                estado = "division"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isOperand(char):
+                estado = "operador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isSeparator(char):
+                estado = "separador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == ' ':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(ESPACIO_HTML)
+            elif char == '\n':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(NUEVO_PARRAFO_HTML)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+        
+        # Si recibe una E, se asegura de que el siguiente caracter sea entero o -
+        elif estado == "entero_con_exponente":
+            if isInteger(char):
+                unfinishedToken.append(char)
+                estado = 'entero_con_exponente_aux1'
+            elif char == '-' or char == '+':
+                unfinishedToken.append(char)
+                estado = 'entero_con_exponente_aux2'
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+
+        # Es valido para salir de numero real despues de recibir E o E-
+        elif estado == "entero_con_exponente_aux1":
+            if isInteger(char):
+                unfinishedToken.append(char)
+            elif char == 'u' or char == 'U':
+                estado = "unsigned_int"
+                unfinishedToken.append(char)
+            elif char == 'l' or char == 'L':
+                estado = "long_int"
+                unfinishedToken.append(char)
+            elif char == '-':
+                estado = "resta"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == '/':
+                estado = "division"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isOperand(char):
+                estado = "operador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isSeparator(char):
+                estado = "separador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == ' ':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(ESPACIO_HTML)
+            elif char == '\n':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(NUEVO_PARRAFO_HTML)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+
+        # Se asegura que despues de recibir un E- o E+, se reciba un numero
+        elif estado == 'entero_con_exponente_aux2':
+            if isInteger(char):
+                unfinishedToken.append(char)
+                estado = 'entero_con_exponente_aux1'
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+
+        elif estado == "unsigned_int":
+            if char == 'l' or char == 'L':
+                estado = "unsigned_long_int"
+                unfinishedToken.append(char)
+            elif char == '-':
+                estado = "resta"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == "/":
+                estado = "division"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isOperand(char):
+                estado = "operador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isSeparator(char):
+                estado = "separador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == ' ':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(ESPACIO_HTML)
+            elif char == '\n':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(NUEVO_PARRAFO_HTML)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+
+        elif estado == "unsigned_long_int":
+            if char == 'l' or char == 'L':
+                estado = "unsigned_long_long_int"
+                unfinishedToken.append(char)
+            elif char == '-':
+                estado = "resta"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == "/":
+                estado = "division"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isOperand(char):
+                estado = "operador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isSeparator(char):
+                estado = "separador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == ' ':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(ESPACIO_HTML)
+            elif char == '\n':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(NUEVO_PARRAFO_HTML)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+
+        elif estado == "unsigned_long_long_int" or estado == "long_unsigned_int":
+            if char == '-':
+                estado = "resta"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == "/":
+                estado = "division"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isOperand(char):
+                estado = "operador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isSeparator(char):
+                estado = "separador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == ' ':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(ESPACIO_HTML)
+            elif char == '\n':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(NUEVO_PARRAFO_HTML)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+
+        elif estado == "long_int":
+            if char == 'l' or char == 'L':
+                estado = "long_long_int"
+                unfinishedToken.append(char)
+            elif char == 'u' or char == 'U':
+                estado = "long_unsigned_int"
+                unfinishedToken.append(char)
+            elif char == '-':
+                estado = "resta"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == "/":
+                estado = "division"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isOperand(char):
+                estado = "operador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isSeparator(char):
+                estado = "separador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == ' ':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(ESPACIO_HTML)
+            elif char == '\n':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(NUEVO_PARRAFO_HTML)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+
+        elif estado == "long_long_int":
+            if char == 'u' or char == 'U':
+                estado = "unsigned_long_long_int"
                 unfinishedToken.append(char)
             elif char == '-':
                 estado = "resta"
@@ -217,8 +551,8 @@ def resaltar(htmlFile):
                     estado = "octal"
                     unfinishedToken.append(char)
                 else:
-                    codigoResaltado.append(manejarErrorSintaxis())
-                    break
+                    estado = "puede_ser_real"
+                    unfinishedToken.append(char)
             elif char == '.':
                 estado = "real"
                 unfinishedToken.append(char)
@@ -272,6 +606,7 @@ def resaltar(htmlFile):
                 codigoResaltado.append(manejarErrorSintaxis())
                 break
         
+
         elif estado == "hexadecimal_final":
             if char in "0123456789ABCDEF":
                 estado = "hexadecimal_final"
@@ -317,17 +652,191 @@ def resaltar(htmlFile):
                 break
 
 
+        elif estado == "real_sin_parte_entera":
+            # Si no tiene parte entera o decimal antes de una E, es error. Se asegura
+            # que si tenga parte decimal antes de un exponente si no hay parte entera.
+            if isInteger(char):
+                estado = "real"
+                unfinishedToken.append(char)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+
+        elif estado == "puede_ser_real":
+            # Un octal empieza con 0. Si se recibe un numero mayor a 7 en el octal,
+            # ya no es octal pero puede ser aún real. Para que sea real debe recibir un
+            # punto. Si no recibe el punto, es un octal inválido
+            if isInteger(char):
+                unfinishedToken.append(char)
+            elif char == ".":
+                estado = "real"
+                unfinishedToken.append(char)
+            else:
+                codigoResaltado.append(char)
+                break
+
+
         elif estado == "real":
-            print(1)
+            if isInteger(char):
+                unfinishedToken.append(char)
+                estado = "real"
+            elif char == 'E' or char == 'e':
+                estado = "real_aux1"
+                unfinishedToken.append(char)
+            elif char == 'f' or char == 'F':
+                estado = "fin_real_con_f"
+                unfinishedToken.append(char)
+            elif char == '-':
+                estado = "resta"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == '/':
+                estado = "division"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isOperand(char):
+                estado = "operador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isSeparator(char):
+                estado = "separador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == ' ':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(ESPACIO_HTML)
+            elif char == '\n':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(NUEVO_PARRAFO_HTML)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
 
+
+        # Si recibe una E, se asegura de que el siguiente caracter sea entero o -
         elif estado == "real_aux1":
-            print(1)
+            if isInteger(char):
+                unfinishedToken.append(char)
+                estado = 'real_aux2'
+            elif char == '-' or char == '+':
+                unfinishedToken.append(char)
+                estado = 'real_aux3'
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
 
+
+        # Es valido para salir de numero real despues de recibir E o E-
         elif estado == "real_aux2":
-            print(1)
+            if isInteger(char):
+                unfinishedToken.append(char)
+                estado = "real_aux2"
+            elif char == '-':
+                estado = "resta"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == '/':
+                estado = "division"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isOperand(char):
+                estado = "operador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isSeparator(char):
+                estado = "separador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == ' ':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(ESPACIO_HTML)
+            elif char == '\n':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(NUEVO_PARRAFO_HTML)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
 
-        elif estado == "real_aux3":
-            print(1)
+
+        # Se asegura que despues de recibir un E- o E+, se reciba un numero
+        elif estado == 'real_aux3':
+            if isInteger(char):
+                unfinishedToken.append(char)
+                estado = 'real_aux2'
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
+
+
+        elif estado == "fin_real_con_f":
+            if isOperand(char):
+                estado = "operador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif isSeparator(char):
+                estado = "separador"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == '-':
+                estado = "resta"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == '/':
+                estado = "division"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                unfinishedToken.append(char)
+            elif char == ' ':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(ESPACIO_HTML)
+            elif char == '\n':
+                estado = "inicial"
+                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
+                codigoResaltado.append(tokenEnHTML)
+                unfinishedToken = []
+                codigoResaltado.append(NUEVO_PARRAFO_HTML)
+            else:
+                codigoResaltado.append(manejarErrorSintaxis())
+                break
 
 
         elif estado == "resta":
@@ -361,13 +870,13 @@ def resaltar(htmlFile):
                 codigoResaltado.append(tokenEnHTML)
                 unfinishedToken = []
                 unfinishedToken.append(char)
-            elif char == '"':
+            elif char == '&quot':
                 estado = "string"
                 tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
                 codigoResaltado.append(tokenEnHTML)
                 unfinishedToken = []
                 unfinishedToken.append(char)
-            elif char == "'":
+            elif char == "&#39":
                 estado = "literal_caracter"
                 tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
                 codigoResaltado.append(tokenEnHTML)
@@ -435,10 +944,10 @@ def resaltar(htmlFile):
                 elif char == '-':
                     estado = "resta"
                     unfinishedToken.append(char)
-                elif char == "'":
+                elif char == "&#39":
                     estado = "caracter"
                     unfinishedToken.append(char)
-                elif char == '"':
+                elif char == '&quot':
                     estado = "string"
                     unfinishedToken.append(char)
                 elif char == '/':
@@ -484,10 +993,10 @@ def resaltar(htmlFile):
             elif char == '-':
                 estado = "resta"
                 unfinishedToken.append(char)
-            elif char == "'":
+            elif char == "&#39":
                 estado = "caracter"
                 unfinishedToken.append(char)
-            elif char == '"':
+            elif char == '&quot':
                 estado = "string"
                 unfinishedToken.append(char)
             elif char == '/':
@@ -549,8 +1058,8 @@ def resaltar(htmlFile):
             if char == "/":
                 estado = "inicial"
                 unfinishedToken.append(char)
-                tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
-                codigoResaltado.append(tokenEnHTML)
+                token = ''.join(unfinishedToken)
+                codigoResaltado.append(f'<span class="comentario">{token}</span>')
                 unfinishedToken = []
             elif char == '\n':
                 token = ''.join(unfinishedToken)
@@ -584,10 +1093,10 @@ def resaltar(htmlFile):
             elif char == '-':
                 estado = "resta"
                 unfinishedToken.append(char)
-            elif char == "'":
+            elif char == "&#39":
                 estado = "literal_caracter"
                 unfinishedToken.append(char)
-            elif char == '"':
+            elif char == '&quot':
                 estado = "string"
                 unfinishedToken.append(char)
             elif char == '/':
@@ -611,7 +1120,7 @@ def resaltar(htmlFile):
 
             
         elif estado == "string":
-            if char == '"':
+            if char == '&quot':
                 estado = "inicial"
                 unfinishedToken.append(char)
                 tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
@@ -625,7 +1134,7 @@ def resaltar(htmlFile):
             if char == '\\':
                 estado = "literal_caracter_escapado"
                 unfinishedToken.append(char)
-            elif char == "'":
+            elif char == "&#39":
                 codigoResaltado.append(manejarErrorSintaxis())
                 break
             else:
@@ -634,7 +1143,7 @@ def resaltar(htmlFile):
 
 
         elif estado == "literal_caracter_escapado":
-            if char in "abfnrtv\\'\"?":
+            if char in "abfnrtv\\?" or char == "&#39" or char == "&quot":
                 estado = "final_literal_caracter"
                 unfinishedToken.append(char)
             else:
@@ -643,7 +1152,7 @@ def resaltar(htmlFile):
 
 
         elif estado == "final_literal_caracter":
-            if char == "'":
+            if char == "&#39":
                 estado = "inicial"
                 unfinishedToken.append(char)
                 tokenEnHTML = generarTokenEnFormatoHTML(unfinishedToken)
@@ -653,22 +1162,18 @@ def resaltar(htmlFile):
                 codigoResaltado.append(manejarErrorSintaxis())
                 break
 
-
-
     return "".join(codigoResaltado)
 
 
-"""
-"""
+
 def generarTokenEnFormatoHTML(unfinishedTokenList):
     token = ''.join(unfinishedTokenList)
     claseCSS = generarClase(token)
     return f'<span class="{claseCSS}">{token}</span>'
 
 
-"""
-"""
 def generarClase(token):
+
     clase = ""
 
     if isInteger(token):
@@ -680,11 +1185,17 @@ def generarClase(token):
             clase = 'palabra-reservada'
         else:
             clase = 'variable'
+    elif token == "#define" or token == "#include":
+        clase = 'palabra-reservada'
+    elif isUnsignedOrLongInt(token):
+        clase = "literal-numerico"
     elif token == '-':
         clase = 'operador'
     elif token == '/':
         clase = 'operador'
     elif isFloat(token):
+        clase = 'literal-numerico'
+    elif isFloatThatEndsWithF(token):
         clase = 'literal-numerico'
     elif isOperand(token):
         clase = "operador"
@@ -707,8 +1218,6 @@ def escribirCodigoResaltadoEnHTML(codigo, htmlFile):
     htmlFile.write(codigo)
 
 
-"""
-"""
 def escribirInicioArchivoHTML(htmlFile):
     htmlFile.write("<!DOCTYPE html>\n")
     htmlFile.write("<html>\n")
@@ -744,6 +1253,7 @@ que indica si el token es un operador valido
 def isSeparator(token):
     return token in SEPARADORES
 
+
 """Recibe un token en forma de string. Regresa un booleano
 que indica si el token es una variable valida
 """
@@ -768,8 +1278,6 @@ def isInteger(token):
         return False
 
 
-"""
-"""
 def isHexadecimal(token):
     if token[0:2] == "0x" or token[0:2] == "0X":
         try:
@@ -792,6 +1300,39 @@ def isFloat(token):
         return False
 
 
+def isFloatThatEndsWithF(token):
+    if len(token) < 2:
+        return False
+    if token[-1] == 'F' or token[-1] == 'f':
+        try:
+            float(token[:-1])
+            return True
+        except ValueError:
+            return False
+    return False
+
+
+def isUnsignedOrLongInt(token):
+    aux = ""
+    for char in token:
+        if char.isnumeric():
+            aux += char
+        elif char in "eE+-":
+            aux += char
+        elif char in 'lLuU':
+            continue
+        else:
+            return False
+
+    # La implementación de python (a comparación de C), establece que los
+    # enteros con exponente E realmente son floats. Primero hay que convertir a
+    # float y luego ver si es int o no
+    if isFloat(aux):
+        return isInteger(float(aux))
+
+    return False
+
+
 """Recibe un token en forma de string. Regresa un booleano
 que indica si el token es un comentario
 """
@@ -801,28 +1342,22 @@ def isComment(token):
     return token[0:2] == "//"
 
 
-"""
-"""
 def isMultilineComment(token):
     if len(token) < 4:
         return False
     return token[0:2] == "/*" or token[-2:] == "*/"
 
 
-"""
-"""
 def isString(token):
     if len(token) < 2:
         return False
-    return token[0] == '"' and token[-1] == '"'
+    return token[0:5] == "&quot" and token[-5:] == "&quot"
 
 
-"""
-"""
 def isCharLiteral(token):
     if len(token) < 2:
         return False
-    return token[0] == "'" and token[-1] == "'"
+    return token[0:4] == "&#39" and token[-4:] == "&#39"
 
 
 if __name__ == '__main__':

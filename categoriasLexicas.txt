@@ -5,6 +5,16 @@
 'x'
 // Enteros
 215
+2u
+2ul
+2ull
+2l
+2lu
+2ll
+2llu
+5.3876e4
+1e18LL
+314159E-5L
 // Reales
 2.15
 2.5E13
